@@ -2,12 +2,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
     public float speed = 5;
     private Rigidbody2D rb2D;
-
     private float move;
-
     public float jumpForce = 4;
     private bool isGrounded;
     public Transform groundCheck;
@@ -21,22 +18,25 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        // Movimiento horizontal
         move = Input.GetAxis("Horizontal");
         rb2D.linearVelocity = new Vector2(move * speed, rb2D.linearVelocity.y);
 
-        if(move != 0)
+        // Voltear el sprite según la dirección
+        if (move != 0)
         {
             transform.localScale = new Vector3(Mathf.Sign(move), 1, 1);
+        }
 
-            if(Input.GetButtonDown("Jump") && isGrounded)
-            {
-                rb2D.linearVelocity = new Vector2(rb2D.linearVelocity.x, jumpForce);
-            }
+        // Salto (FUERA del if de movimiento)
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            rb2D.linearVelocity = new Vector2(rb2D.linearVelocity.x, jumpForce);
         }
     }
 
     private void FixedUpdate()
-        {
-            isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
     }
 }
