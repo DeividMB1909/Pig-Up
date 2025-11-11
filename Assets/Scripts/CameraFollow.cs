@@ -2,26 +2,30 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform target; // El personaje a seguir
-    public float smoothSpeed = 0.125f; // Velocidad de seguimiento suave
-    public Vector3 offset = new Vector3(0, 0, -10); // Desplazamiento de la cámara
+    public Transform target;
+    public float smoothSpeed = 0.125f;
+    public Vector3 offset = new Vector3(0, 0, -10);
+
+    // Límites de la cámara
+    public bool useBounds = true;
+    public float minX = -2f;
+    public float maxX = 52f;
+    public float minY = 3f;
+    public float maxY = 16f;
 
     void LateUpdate()
     {
-        // Verificar que el target esté asignado
-        if (target == null)
-        {
-            Debug.LogWarning("CameraFollow: No hay target asignado!");
-            return;
-        }
+        if (target == null) return;
 
-        // Calcular posición deseada
         Vector3 desiredPosition = target.position + offset;
-
-        // Suavizar el movimiento
         Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
 
-        // Aplicar la posición (mantener Z en -10 siempre)
+        if (useBounds)
+        {
+            smoothedPosition.x = Mathf.Clamp(smoothedPosition.x, minX, maxX);
+            smoothedPosition.y = Mathf.Clamp(smoothedPosition.y, minY, maxY);
+        }
+
         transform.position = new Vector3(smoothedPosition.x, smoothedPosition.y, -10);
     }
 }
