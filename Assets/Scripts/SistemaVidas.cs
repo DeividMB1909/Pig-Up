@@ -52,4 +52,8 @@ public class SistemaVidas : MonoBehaviour
             }
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 701a2d4ed0ae5f112c3567b9761837699524e190

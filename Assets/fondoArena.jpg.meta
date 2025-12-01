@@ -1,14 +1,10 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-guid: 957ebcf35db79cf41a7a48b9720597e2
-=======
-guid: d65ceab8a466d1846aec23a3a34e9b3c
->>>>>>> 701a2d4ed0ae5f112c3567b9761837699524e190
+guid: ff280bdeb3b180a40b5417189798f712
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5783529255047572989
-    second: tilemap_new_softy_sand_0
+      213: 6639891839641098327
+    second: fondoArena_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -104,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: tilemap_new_softy_sand_0
+      name: fondoArena_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 352
-        height: 160
+        width: 1024
+        height: 1024
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -119,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3025fc4f8c6ccbfa0800000000000000
-      internalID: -5783529255047572989
+      spriteID: 75892d0d272a52c50800000000000000
+      internalID: 6639891839641098327
       vertices: []
       indices: 
       edges: []
@@ -139,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      tilemap_new_softy_sand_0: -5783529255047572989
+      fondoArena_0: 6639891839641098327
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

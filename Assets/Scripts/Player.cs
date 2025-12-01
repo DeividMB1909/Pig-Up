@@ -23,17 +23,16 @@ public class Player : MonoBehaviour
     public AudioClip coinClip;
     public AudioClip barrelClip;
 
-    // Componentes
     private Rigidbody2D rb2D;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private SistemaVidas sistemaVidas;
 
-    // Variables de estado
     private float move;
     private bool isGrounded;
     private int coins;
     private bool esInvulnerable = false;
+    private bool estaMuerto = false;
 
     void Start()
     {
@@ -42,147 +41,141 @@ public class Player : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         sistemaVidas = FindObjectOfType<SistemaVidas>();
 
-        // Ajustar interpolación para movimiento más suave
         rb2D.interpolation = RigidbodyInterpolation2D.Interpolate;
+        ActualizarUI();
     }
 
     void Update()
     {
-        // Movimiento horizontal
+        if (estaMuerto) return;
+
         move = Input.GetAxis("Horizontal");
 
-        // Voltear sprite
         if (move != 0)
-        {
             transform.localScale = new Vector3(Mathf.Sign(move), 1, 1);
-        }
 
-        // SALTO
         if (Input.GetButtonDown("Jump") && isGrounded)
-        {
             rb2D.linearVelocity = new Vector2(rb2D.linearVelocity.x, jumpForce);
-        }
 
-        // Cancelar salto si se suelta el botón
         if (Input.GetButtonUp("Jump") && rb2D.linearVelocity.y > 0f)
-        {
             rb2D.linearVelocity = new Vector2(rb2D.linearVelocity.x, rb2D.linearVelocity.y * 0.5f);
-        }
 
-        // Parámetros del animator
         animator.SetFloat("Speed", Mathf.Abs(move));
         animator.SetFloat("VerticalVelocity", rb2D.linearVelocity.y);
         animator.SetBool("IsGrounded", isGrounded);
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        // Detectar suelo
+        if (estaMuerto)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            return;
+        }
+
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
 
-        // Movimiento horizontal
         rb2D.linearVelocity = new Vector2(move * speed, rb2D.linearVelocity.y);
     }
 
-    public int GetCoins()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        return coins;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Coin"))
+        // Monedas
+        if (other.CompareTag("Coin"))
         {
-            // Audio de moneda
-            if (audioSource != null && coinClip != null)
-            {
-                audioSource.PlayOneShot(coinClip);
-            }
-
-            Destroy(collision.gameObject);
             coins++;
-            textCoins.text = coins.ToString();
+            ActualizarUI();
+
+            if (audioSource != null && coinClip != null)
+                audioSource.PlayOneShot(coinClip);
+
+            Destroy(other.gameObject);
         }
 
-        // DAÑO POR PINCHOS
-        if (collision.CompareTag("Spikes"))
+        // Pinchos
+        if (other.CompareTag("Spikes"))
         {
-            if (!esInvulnerable)
-            {
-                RecibirDaño();
-            }
+            RecibirDaño();
         }
 
-        if (collision.CompareTag("Barrel"))
+        // Barriles
+        if (other.CompareTag("Barrel"))
         {
-            // Audio de barril
             if (audioSource != null && barrelClip != null)
-            {
                 audioSource.PlayOneShot(barrelClip);
-            }
 
-            // Knockback
-            Vector2 knockbackDir = (rb2D.position - (Vector2)collision.transform.position).normalized;
-            rb2D.linearVelocity = Vector2.zero;
-            rb2D.AddForce(knockbackDir * 3, ForceMode2D.Impulse);
-
-            // Destruir barril
-            BoxCollider2D[] colliders = collision.gameObject.GetComponents<BoxCollider2D>();
-            foreach (BoxCollider2D col in colliders)
-            {
-                col.enabled = false;
-            }
-
-            Animator barrelAnimator = collision.GetComponent<Animator>();
+            Animator barrelAnimator = other.GetComponent<Animator>();
             if (barrelAnimator != null)
-            {
                 barrelAnimator.enabled = true;
-            }
 
-            Destroy(collision.gameObject, 0.5f);
+            // Rebote
+            rb2D.linearVelocity = new Vector2(rb2D.linearVelocity.x, 2f);
+
+            // Quitar colisiones
+            foreach (var c in other.GetComponents<Collider2D>())
+                c.enabled = false;
+
+            Destroy(other.gameObject, 0.4f);
         }
     }
 
     public void RecibirDaño()
     {
+        if (estaMuerto || esInvulnerable) return;
+
         if (sistemaVidas != null)
         {
             sistemaVidas.PerderVida();
+            ActualizarUI();
 
-            // Si aún tiene vidas, activar invulnerabilidad temporal
-            if (sistemaVidas.vidasActuales > 0)
+            if (sistemaVidas.vidasActuales <= 0)
             {
-                StartCoroutine(InvulnerabilidadTemporal());
+                Morir();
             }
             else
             {
-                // Game Over - reiniciar escena
-                Invoke("ReiniciarEscena", 1f);
+                animator.SetTrigger("Hit");
+                StartCoroutine(InvulnerabilidadTemporal());
             }
         }
         else
         {
-            // Si no hay sistema de vidas, reiniciar directamente (comportamiento original)
             ReiniciarEscena();
         }
+    }
+
+    void Morir()
+    {
+        estaMuerto = true;
+
+        rb2D.linearVelocity = Vector2.zero;
+        rb2D.bodyType = RigidbodyType2D.Kinematic;
+
+        foreach (var col in GetComponents<Collider2D>())
+            col.enabled = false;
+
+        animator.SetTrigger("Die");
+        Invoke("ReiniciarEscena", 1.2f);
     }
 
     IEnumerator InvulnerabilidadTemporal()
     {
         esInvulnerable = true;
 
-        // Efecto de parpadeo
-        if (spriteRenderer != null)
+        for (float t = 0; t < tiempoInvulnerable; t += 0.1f)
         {
-            for (float i = 0; i < tiempoInvulnerable; i += 0.1f)
-            {
-                spriteRenderer.enabled = !spriteRenderer.enabled;
-                yield return new WaitForSeconds(0.1f);
-            }
-            spriteRenderer.enabled = true;
+            spriteRenderer.enabled = !spriteRenderer.enabled;
+            yield return new WaitForSeconds(0.1f);
         }
 
+        spriteRenderer.enabled = true;
         esInvulnerable = false;
+    }
+
+    void ActualizarUI()
+    {
+        if (textCoins != null)
+            textCoins.text = coins.ToString();
     }
 
     void ReiniciarEscena()
@@ -190,7 +183,6 @@ public class Player : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    // Visualizar en el editor
     private void OnDrawGizmosSelected()
     {
         if (groundCheck != null)
