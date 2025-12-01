@@ -4000,17 +4000,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1324596405}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e27ea7733cd693641b4700ddc0c2163c, type: 3}
+  m_Script: {fileID: 11500000, guid: ec80650de1c7aad4fa4982c370dd125e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SistemaVidas
   vidasMaximas: 3
   vidasActuales: 0
-  iconosVidas:
-  - {fileID: 2138234759}
-  - {fileID: 618883984}
-  - {fileID: 1338792167}
-  vidaLlena: {fileID: -4442010881100703927, guid: 458939855bb5b1e4ea8b44b3a80a7dca, type: 3}
-  vidaVacia: {fileID: -8636308924727894567, guid: c4a727c6761f6d34d964270b660dbdc9, type: 3}
+  iconosVidas: []
+  vidaLlena: {fileID: 0}
+  vidaVacia: {fileID: 0}
 --- !u!1 &1338792165
 GameObject:
   m_ObjectHideFlags: 0
@@ -29056,7 +29053,6 @@ GameObject:
   - component: {fileID: 2143906118}
   - component: {fileID: 2143906121}
   - component: {fileID: 2143906120}
-  - component: {fileID: 2143906119}
   - component: {fileID: 2143906122}
   m_Layer: 0
   m_Name: portalRings1_0
@@ -29080,19 +29076,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1248490202}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2143906119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2143906117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81cc7182bc877cc4da93568e4213dfcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Portal
-  player: {fileID: 4334722234501351486}
 --- !u!95 &2143906120
 Animator:
   serializedVersion: 7
@@ -29304,17 +29287,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5eb1c63d7a54cb408a9fdd75ec1fd17, type: 3}
---- !u!114 &4334722234501351486 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9195144913473818493, guid: b5eb1c63d7a54cb408a9fdd75ec1fd17, type: 3}
-  m_PrefabInstance: {fileID: 4334722234501351485}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f732249c82fd20418bd2260bf97d0cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Player
 --- !u!4 &7878350319072980073 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 823727707785422732, guid: b5eb1c63d7a54cb408a9fdd75ec1fd17, type: 3}

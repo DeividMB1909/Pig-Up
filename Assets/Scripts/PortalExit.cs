@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Portal : MonoBehaviour
+public class Portal1a2 : MonoBehaviour
 {
     public Player player; // arrastrar el Player desde Unity
 
