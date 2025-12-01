@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 public class SistemaVidas : MonoBehaviour
 {
-    [Header("Configuración")]
+    [Header("ConfiguraciÃ³n")]
     public int vidasMaximas = 3;
-    public int vidasActuales; // Ahora es público para que Player pueda leerlo
+    public int vidasActuales; // Ahora es pÃºblico para que Player pueda leerlo
 
     [Header("UI - Sprites")]
     public Image[] iconosVidas;
@@ -52,8 +52,4 @@ public class SistemaVidas : MonoBehaviour
             }
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 701a2d4ed0ae5f112c3567b9761837699524e190
