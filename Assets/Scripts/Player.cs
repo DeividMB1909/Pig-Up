@@ -183,6 +183,11 @@ public class Player : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    public int GetCoins()
+    {
+        return coins;
+    }
+
     private void OnDrawGizmosSelected()
     {
         if (groundCheck != null)
